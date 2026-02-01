@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dto\CommentDto.cs" />
     <Compile Include="Dto\PostDto.cs" />
     <Compile Include="Dto\RegisterDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
