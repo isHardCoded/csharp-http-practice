@@ -20,8 +20,8 @@ namespace http_practice
             _postService = new PostService();
             _commentService = new CommentService();
 
-            var post = _postService.GetByIdAsync(4);
-            Console.WriteLine(post);
+            var post = await _postService.GetByIdAsync(4);
+            Console.WriteLine(post.Title);
 
             //var users = await _userService.GetAllAsync();
             //var posts = await _postService.GetAllAsync();
