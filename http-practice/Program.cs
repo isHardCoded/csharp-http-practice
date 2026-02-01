@@ -10,18 +10,27 @@ namespace http_practice
     internal class Program
     {
         private static UserService _userService;
+        private static PostService _postService;
 
         static async Task Main(string[] args)
         {
             _userService = new UserService();
+            _postService = new PostService();
 
             var users = await _userService.GetAllAsync();
+            var posts = await _postService.GetAllAsync();
 
             foreach (var user in users)
             {
                 Console.WriteLine($"ID: {user.Id}");
                 Console.WriteLine($"Username: {user.Username}");
                 Console.WriteLine($"Email: {user.Email}");
+            }
+
+            foreach (var post in posts)
+            {
+                Console.WriteLine($"ID: {post.Id}");
+                Console.WriteLine($"Title: {post.Title}");
             }
         }
     }
