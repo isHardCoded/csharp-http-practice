@@ -23,7 +23,7 @@ namespace http_practice
 
             var newPost = new PostDto
             {
-                Title = "New Post Title",
+                Title = "titel 123",
                 Content = "New Post Content"
             };
 
