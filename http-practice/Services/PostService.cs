@@ -37,6 +37,23 @@ namespace http_practice.Services
             }
         }
     
+        public async Task<PostDto> GetByIdAsync(int id)
+        {
+            try
+            {
+                return await _http.GetFromJsonAsync<PostDto>($"/api/posts/{id}");
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error HTTP request: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error get all users: {ex.Message}");
+                throw;
+            }
+        }
         public async Task<HttpResponseMessage> CreateAsync(PostDto post)
         {
             try
@@ -53,6 +70,42 @@ namespace http_practice.Services
                 Console.WriteLine($"Error get all users: {ex.Message}");
                 throw;
             }
-        } 
+        }
+
+        public async Task<HttpResponseMessage> EditAsync(PostDto post, int id)
+        {
+            try
+            {
+                return await _http.PutAsJsonAsync<PostDto>($"/api/posts/{id}", post);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error HTTP request: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error get all users: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<HttpResponseMessage> DeleteAsync(int id)
+        {
+            try
+            {
+                return await _http.DeleteAsync($"/api/posts/{id}");
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error HTTP request: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error get all users: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

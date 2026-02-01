@@ -19,6 +19,24 @@ namespace http_practice.Services
             _http = ApiClient.Instance;
         }
 
+        public async Task<List<CommentDto>> GetAllAsync()
+        {
+            try
+            {
+                return await _http.GetFromJsonAsync<List<CommentDto>>("/api/comments");
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error HTTP request: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error get all users: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<HttpResponseMessage> CreateAsync(CommentDto comment)
         {
             try
