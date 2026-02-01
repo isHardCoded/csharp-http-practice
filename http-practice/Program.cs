@@ -3,7 +3,6 @@ using http_practice.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace http_practice
@@ -20,52 +19,327 @@ namespace http_practice
             _postService = new PostService();
             _commentService = new CommentService();
 
-            var post = await _postService.GetByIdAsync(4);
-            Console.WriteLine(post.Title);
+            while (true)
+            {
+                ShowMainMenu();
+                var choice = Console.ReadLine();
 
-            //var users = await _userService.GetAllAsync();
-            //var posts = await _postService.GetAllAsync();
-            //var comments = await _commentService.GetAllAsync();
+                switch (choice)
+                {
+                    case "1":
+                        await ShowUsers();
+                        break;
+                    case "2":
+                        await ShowPosts();
+                        break;
+                    case "3":
+                        await ShowComments();
+                        break;
+                    case "4":
+                        await ShowPostById();
+                        break;
+                    case "5":
+                        await CreatePost();
+                        break;
+                    case "6":
+                        await EditPost();
+                        break;
+                    case "7":
+                        await DeletePost();
+                        break;
+                    case "8":
+                        await CreateComment();
+                        break;
+                    case "0":
+                        Console.WriteLine("До свидания!");
+                        return;
+                    default:
+                        Console.WriteLine("Неверный выбор. Попробуйте снова.");
+                        break;
+                }
 
-            //var newPost = new PostDto
-            //{
-            //    Title = "Title 123",
-            //    Content = "New Post Content"
-            //};
+                Console.WriteLine("\nНажмите любую клавишу для продолжения...");
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
 
-            //var newComment = new CommentDto
-            //{
-            //    Content = "New comment 1",
-            //    UserId = 4,
-            //    PostId = 1,
-            //};
+        static void ShowMainMenu()
+        {
+            Console.WriteLine("=== HTTP Practice API ===");
+            Console.WriteLine("1. Показать всех пользователей");
+            Console.WriteLine("2. Показать все посты");
+            Console.WriteLine("3. Показать все комментарии");
+            Console.WriteLine("4. Показать пост по ID");
+            Console.WriteLine("5. Создать новый пост");
+            Console.WriteLine("6. Редактировать пост");
+            Console.WriteLine("7. Удалить пост");
+            Console.WriteLine("8. Создать новый комментарий");
+            Console.WriteLine("0. Выход");
+            Console.Write("Выберите действие: ");
+        }
 
-            //var response = _postService.CreateAsync(newPost);
-            //Console.WriteLine(response.Result);
+        static async Task ShowUsers()
+        {
+            Console.WriteLine("\n=== ПОЛЬЗОВАТЕЛИ ===");
+            try
+            {
+                var users = await _userService.GetAllAsync();
 
-            //var response = _commentService.CreateAsync(newComment);
-            //Console.WriteLine(response.Result);
+                foreach (var user in users)
+                {
+                    Console.WriteLine($"ID: {user.Id}");
+                    Console.WriteLine($"Username: {user.Username}");
+                    Console.WriteLine($"Email: {user.Email}");
+                    Console.WriteLine("-------------------");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка загрузки пользователей: {ex.Message}");
+            }
+        }
 
-            //foreach (var user in users)
-            //{
-            //    Console.WriteLine($"ID: {user.Id}");
-            //    Console.WriteLine($"Username: {user.Username}");
-            //    Console.WriteLine($"Email: {user.Email}");
-            //}
+        static async Task ShowPosts()
+        {
+            Console.WriteLine("\n=== ПОСТЫ ===");
+            try
+            {
+                var posts = await _postService.GetAllAsync();
 
-            //foreach (var post in posts)
-            //{
-            //    Console.WriteLine($"ID: {post.Id}");
-            //    Console.WriteLine($"Title: {post.Title}");
-            //}
+                foreach (var post in posts)
+                {
+                    Console.WriteLine($"ID: {post.Id}");
+                    Console.WriteLine($"Заголовок: {post.Title}");
+                    Console.WriteLine($"Содержание: {post.Content}");
+                    Console.WriteLine("-------------------");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка загрузки постов: {ex.Message}");
+            }
+        }
 
-            //foreach (var comment in comments)
-            //{
-            //    Console.WriteLine($"ID: {comment.Id}");
-            //    Console.WriteLine($"Title: {comment.Content}");
-            //    Console.WriteLine($"User ID: {comment.UserId}");
-            //    Console.WriteLine($"Post ID: {comment.PostId}");
-            //}
+        static async Task ShowComments()
+        {
+            Console.WriteLine("\n=== КОММЕНТАРИИ ===");
+            try
+            {
+                var comments = await _commentService.GetAllAsync();
+
+                foreach (var comment in comments)
+                {
+                    Console.WriteLine($"ID: {comment.Id}");
+                    Console.WriteLine($"Содержание: {comment.Content}");
+                    Console.WriteLine($"User ID: {comment.UserId}");
+                    Console.WriteLine($"Post ID: {comment.PostId}");
+                    Console.WriteLine("-------------------");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка загрузки комментариев: {ex.Message}");
+            }
+        }
+
+        static async Task ShowPostById()
+        {
+            Console.Write("Введите ID поста: ");
+            if (int.TryParse(Console.ReadLine(), out int id))
+            {
+                try
+                {
+                    var post = await _postService.GetByIdAsync(id);
+                    Console.WriteLine("\n=== ПОСТ ===");
+                    Console.WriteLine($"ID: {post.Id}");
+                    Console.WriteLine($"Заголовок: {post.Title}");
+                    Console.WriteLine($"Содержание: {post.Content}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: Пост с ID {id} не найден - {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Неверный ID поста");
+            }
+        }
+
+        static async Task CreatePost()
+        {
+            Console.WriteLine("\n=== СОЗДАНИЕ ПОСТА ===");
+            Console.Write("Заголовок: ");
+            string title = Console.ReadLine();
+
+            Console.Write("Содержание: ");
+            string content = Console.ReadLine();
+
+            var newPost = new PostDto
+            {
+                Title = title,
+                Content = content
+            };
+
+            try
+            {
+                var response = await _postService.CreateAsync(newPost);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("✅ Пост успешно создан!");
+                }
+                else
+                {
+                    Console.WriteLine($"❌ Ошибка создания поста: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+
+        static async Task EditPost()
+        {
+            Console.Write("Введите ID поста для редактирования: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Неверный ID поста");
+                return;
+            }
+
+            try
+            {
+                // Получаем текущий пост для просмотра
+                var currentPost = await _postService.GetByIdAsync(id);
+                Console.WriteLine("\nТекущие данные поста:");
+                Console.WriteLine($"Заголовок: {currentPost.Title}");
+                Console.WriteLine($"Содержание: {currentPost.Content}");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Пост с ID {id} не найден");
+                return;
+            }
+
+            Console.WriteLine("\n=== РЕДАКТИРОВАНИЕ ПОСТА ===");
+            Console.Write("Новый заголовок (Enter для пропуска): ");
+            string title = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(title)) title = null;
+
+            Console.Write("Новое содержание (Enter для пропуска): ");
+            string content = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(content)) content = null;
+
+            var updatedPost = new PostDto
+            {
+                Title = title,
+                Content = content
+            };
+
+            try
+            {
+                var response = await _postService.EditAsync(updatedPost, id);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("✅ Пост успешно обновлен!");
+                }
+                else
+                {
+                    Console.WriteLine($"❌ Ошибка обновления: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
+        }
+
+        static async Task DeletePost()
+        {
+            Console.Write("Введите ID поста для удаления: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Неверный ID поста");
+                return;
+            }
+
+            try
+            {
+                var post = await _postService.GetByIdAsync(id);
+                Console.WriteLine("\nПост для удаления:");
+                Console.WriteLine($"ID: {post.Id}");
+                Console.WriteLine($"Заголовок: {post.Title}");
+                Console.WriteLine($"Содержание: {post.Content}");
+
+                Console.Write("Вы уверены? (y/n): ");
+                if (Console.ReadLine()?.ToLower() == "y")
+                {
+                    var response = await _postService.DeleteAsync(id);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("✅ Пост успешно удален!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"❌ Ошибка удаления: {response.StatusCode}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Удаление отменено");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: Пост с ID {id} не найден - {ex.Message}");
+            }
+        }
+
+        static async Task CreateComment()
+        {
+            Console.WriteLine("\n=== СОЗДАНИЕ КОММЕНТАРИЯ ===");
+            Console.Write("Содержание: ");
+            string content = Console.ReadLine();
+
+            Console.Write("User ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int userId))
+            {
+                Console.WriteLine("Неверный User ID");
+                return;
+            }
+
+            Console.Write("Post ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int postId))
+            {
+                Console.WriteLine("Неверный Post ID");
+                return;
+            }
+
+            var newComment = new CommentDto
+            {
+                Content = content,
+                UserId = userId,
+                PostId = postId
+            };
+
+            try
+            {
+                var response = await _commentService.CreateAsync(newComment);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("✅ Комментарий успешно создан!");
+                }
+                else
+                {
+                    Console.WriteLine($"❌ Ошибка создания комментария: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка: {ex.Message}");
+            }
         }
     }
 }
