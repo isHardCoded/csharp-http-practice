@@ -12,5 +12,6 @@ namespace http_practice.Dto
         public string Content { get; set; }
         public int UserId { get; set; }
         public int PostId { get; set; }
+        public int Likes {  get; set; }
     }
 }
