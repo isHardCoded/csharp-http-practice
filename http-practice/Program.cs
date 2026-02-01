@@ -1,4 +1,5 @@
-﻿using http_practice.Services;
+﻿using http_practice.Dto;
+using http_practice.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,15 @@ namespace http_practice
 
             var users = await _userService.GetAllAsync();
             var posts = await _postService.GetAllAsync();
+
+            var newPost = new PostDto
+            {
+                Title = "New Post Title",
+                Content = "New Post Content"
+            };
+
+            var response = _postService.CreateAsync(newPost);
+            Console.WriteLine(response.Result);
 
             foreach (var user in users)
             {
