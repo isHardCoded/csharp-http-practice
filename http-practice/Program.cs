@@ -22,37 +22,53 @@ namespace http_practice
             while (true)
             {
                 ShowMainMenu();
-                var choice = Console.ReadLine();
 
-                switch (choice)
-                {
-                    case "1":
+                switch (Console.ReadLine().ToLower()) {
+                    case "show users":
                         await ShowUsers();
                         break;
-                    case "2":
+                    case "show posts":
                         await ShowPosts();
                         break;
-                    case "3":
+                    case "show comments":
                         await ShowComments();
                         break;
-                    case "4":
+                    case "show post by id":
                         await ShowPostById();
                         break;
-                    case "5":
+                    case "create post":
                         await CreatePost();
                         break;
-                    case "6":
+                    case "edit post":
                         await EditPost();
                         break;
-                    case "7":
+                    case "delete post":
                         await DeletePost();
                         break;
-                    case "8":
+                    case "create comment":
                         await CreateComment();
                         break;
-                    case "0":
+
+                    case "help":
+                        Console.WriteLine("=== Help ===");
+                        Console.WriteLine("Commands:");
+
+                        Console.WriteLine("Show actions:");
+                        Console.WriteLine("|> Show Users - gets users from server and show them in console");
+                        Console.WriteLine("|> Show Posts - gets posts from server and show them in console");
+                        Console.WriteLine("|  |> Show Post By Id - gets post from server by id, and shows it in console");
+                        Console.WriteLine("|> Show Comments - gets comments from server and show them in console");
+
+                        Console.WriteLine("Create actions:");
+                        Console.WriteLine("|> Create Post - creating a new post on server");
+                        Console.WriteLine("|  |> Edit Post - edits an existing post on server");
+                        Console.WriteLine("|  |> Delete Post - delete an existing post on server");
+                        Console.WriteLine("|> Create Comment - creating a new comment for post on server");
+
+                    case "exit":
                         Console.WriteLine("До свидания!");
                         return;
+
                     default:
                         Console.WriteLine("Неверный выбор. Попробуйте снова.");
                         break;
@@ -67,16 +83,7 @@ namespace http_practice
         static void ShowMainMenu()
         {
             Console.WriteLine("=== HTTP Practice API ===");
-            Console.WriteLine("1. Показать всех пользователей");
-            Console.WriteLine("2. Показать все посты");
-            Console.WriteLine("3. Показать все комментарии");
-            Console.WriteLine("4. Показать пост по ID");
-            Console.WriteLine("5. Создать новый пост");
-            Console.WriteLine("6. Редактировать пост");
-            Console.WriteLine("7. Удалить пост");
-            Console.WriteLine("8. Создать новый комментарий");
-            Console.WriteLine("0. Выход");
-            Console.Write("Выберите действие: ");
+            Console.WriteLine("Enter \"Help\" for commands list; Enter \"Exit\" to close the program");
         }
 
         static async Task ShowUsers()
